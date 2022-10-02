@@ -1,0 +1,43 @@
+# импортируем необходимые библиотеки
+import logging
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler, CallbackContext
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+# настраиваем модуль logging
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+# сохраняем наш api токен
+TOKEN = '5774838641:AAFZ5_y78fdhBrcHkmi2Oo5NAM1ckWKeskE!'
+def start(update, context):
+    # посылает сообщение в ответ на команду /start
+    update.message.reply_text('Testing 123')
+def hello(update, context):
+    # посылает сообщение в ответ на команду /hello 
+    update.message.reply_text('Hello World! \U0001F600')
+    # to start the bot
+def main():
+    # setup updating together with our telegram api token
+    updater = Updater(TOKEN, use_context=True)
+# get the dispatcher to register handlers
+    dp = updater.dispatcher
+# add command handlers for different command
+    dp.add_handler(CommandHandler("start", start))
+    dp.add_handler(CommandHandler("hello", hello))
+# error logging
+    dp.add_error_handler(error)
+# start the bot
+    updater.start_polling()
+# set the bot to run until you force it to stop
+    updater.idle()
+if __name__ == '__main__':
+    main()
+# для отладки
+def error(update, context):
+    logger.warning('Update "%s" caused error "%s"', update, context.error)
+# отображение кнопки
+def confession(update, context: CallbackContext)-> None:
+    keyboard = [
+        [InlineKeyboardButton("Yes", callback_data='yes'),
+        InlineKeyboardButton("No", callback_data='no')]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    update.message.reply_text('BE MY GIRL OK?', reply_markup=reply_markup)
+dp.add_handler(CommandHandler("confession", confession))
